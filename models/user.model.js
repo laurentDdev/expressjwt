@@ -14,7 +14,8 @@ const userModel = {
     create:async (data) => {
        try {
            const { email , firstname,lastname,hashedPassword } = data
-           const result = await sql.query `INSERT INTO users (firstname,lastname,email,password) VALUES (${firstname}, ${lastname},${email}, ${hashedPassword})`
+           const pseudo = `${firstname.substring(0,3)}${lastname.substring(0,2)}`
+           const result = await sql.query `INSERT INTO users (pseudo,firstname,lastname,email,password) VALUES (${pseudo},${firstname}, ${lastname},${email}, ${hashedPassword})`
            return result
        }catch (e) {
            console.log(e)
@@ -32,6 +33,14 @@ const userModel = {
     getByMail:async (email) => {
         try {
             const result = await sql.query `SELECT * FROM users WHERE email = ${email}`
+            return result
+        }catch (e) {
+            console.log(e)
+        }
+    },
+    removeJwt:async (email) => {
+        try {
+            const result = sql.query `UPDATE users SET jwt = null WHERE email = ${email}`
             return result
         }catch (e) {
             console.log(e)
